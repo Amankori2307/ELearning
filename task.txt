@@ -1,0 +1,19 @@
+change title of each page
+empty form on close or completion(login)
+delete old images on edit (changing course image)
+hash password
+crop image
+show loading while upload files
+improve UI
+
+Lessson 2:55 - 
+Unique File name  - 2:57
+
+            $filename = pathinfo($course_image, PATHINFO_FILENAME);
+            $ext = pathinfo($course_image, PATHINFO_EXTENSION);
+            $course_image = $filename.date('mdYhis').".".$ext;
+
+Ajax is used to change web page data without refreshing webpage
+
+
+Learn USES of Ajax and why it is important
