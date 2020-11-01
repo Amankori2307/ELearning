@@ -4,6 +4,9 @@
     }
     include_once('../dbConnection.php');
 
+    
+
+
     // Cheking Email Already Registered
     if(isset($_POST['checkemail']) && isset($_POST['stuemail'])){
         $stuemail = $_POST['stuemail'];
@@ -20,7 +23,7 @@
         $stuemail = $_POST['stuemail'];
         $stupass = $_POST['stupass'];
 
-        $sql = "INSERT INTO student(stu_name, stu_email, stu_pass) VALUES('$stuname', '$stuemail', '$stupass')";
+        $sql = "INSERT INTO student(stu_name, stu_email, stu_pass, stu_img) VALUES('$stuname', '$stuemail', '$stupass', '../images/stu/default.png')";
         if($conn->query($sql) == TRUE){
             echo json_encode("OK");
         }else{
@@ -29,7 +32,7 @@
         }
     }
 
-    // Student Login
+    // Student Login 
     if(!isset($_SESSION['is_login'])){
         if(isset($_POST["checkLogEmail"]) && isset($_POST["stuLogEmail"]) && isset($_POST["stuLogPass"])){
             $stuLogEmail = $_POST["stuLogEmail"];
@@ -40,9 +43,17 @@
             $result = $conn->query($sql);
             $row = $result->num_rows;
             if($row == 1){
-                $_SESSION['is_login'] = true;
-                $_SESSION['stuLogEmail'] = $stuLogEmail;
-                echo json_encode($row);
+               $sessionId = session_id();
+                $sql = "INSERT INTO sessions(session_id, is_login, stuLogEmail) VALUES('$sessionId','1', '$stuLogEmail')";
+                if($conn->query($sql) == TRUE){
+                    echo json_encode($row);                    
+                    $_SESSION['is_login'] = true;
+                    $_SESSION['stuLogEmail'] = $stuLogEmail;
+                    setcookie("session_id", session_id(), time() + (86400 * 30), "/");
+                }
+                else{
+                    echo json_encode($row);
+                }
             }else if($row == 0){
                 echo json_encode($row);
             }

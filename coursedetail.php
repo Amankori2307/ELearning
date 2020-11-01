@@ -1,8 +1,13 @@
 
 <!-- Start Including Header -->
 <?php
+
     include('dbConnection.php');
     include('./includes/header.php');
+    
+    if(!isset($_SESSION)){
+        session_start();
+    }
 ?>
 <!-- End Including Header -->
 
@@ -21,6 +26,8 @@
         $sql = "SELECT * FROM course WHERE course_id = {$_GET['course_id']}";
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
+        // setcookie("course_id", $row['course_id'], time() + (86400 * 30), "/");
+        $_SESSION['course_id'] = $row['course_id'];
     }
 ?>
 <!-- End Fetching Data -->
@@ -42,7 +49,7 @@
                         <span class="font-weight-bolder">&#8377 <?php if(isset($row['course_price'])){ echo $row['course_price'];}?></span>
                     </p>
                     <input type="hidden" name="course_price" value="<?php if(isset($row['course_price'])){ echo $row['course_price'];}?>">
-                    <input type="hidden" name="course_id" value="<?php if(isset($row['course_id'])){ echo $row['course_id'];}?>">
+                    <!-- <input type="hidden" name="course_id" value="<?php if(isset($row['course_id'])){ echo $row['course_id'];}?>"> -->
                     <button type="submit" class="btn btn-primary text-white font-weight-bolder float-right" name="buy">Buy Now</button>
                 </form>
             </div>

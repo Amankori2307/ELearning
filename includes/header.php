@@ -1,4 +1,25 @@
+
+
 <!DOCTYPE html>
+<?php 
+  include_once('./dbConnection.php');
+  if(!isset($_SESSION)){
+    session_start();
+  }	
+  if(isset($_COOKIE['session_id'])){
+    $sid = $_COOKIE['session_id'];
+    if(!isset($_SESSION['is_login'])){
+      $sql = "SELECT * FROM sessions WHERE session_id = '$sid'";
+      $result = $conn->query($sql);
+      if($result->num_rows > 0){
+        $row = $result->fetch_assoc();
+        $_SESSION['is_login'] = true;
+        $_SESSION['stuLogEmail'] = $row['stuLogEmail'];
+      }
+    }
+  }
+   
+?>
 <html lang="en">
 <head>
 	<meta charset="utf-8">
@@ -34,7 +55,7 @@
         <a class="nav-link" href="paymentstatus.php">Payment Status</a>
       </li>
       <?php
-        session_start();
+        
         if(isset($_SESSION['is_login'])){
           echo '    <li class="nav-item custom-nav-item">
                       <a class="nav-link" href="Student/studentProfile.php">My Profile</a>
