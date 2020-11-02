@@ -6,6 +6,8 @@ crop image
 show loading while upload files
 improve UI
 
+before fetching course to watch check if current user has bought it or not
+
 Lessson 2:55 - 
 Unique File name  - 2:57
 
