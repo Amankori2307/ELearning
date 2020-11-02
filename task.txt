@@ -1,4 +1,8 @@
 change title of each page
+active class to pages
+validate forms
+
+use ajax to
 empty form on close or completion(login)
 delete old images on edit (changing course image)
 hash password

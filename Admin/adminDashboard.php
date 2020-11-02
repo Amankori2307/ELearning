@@ -1,5 +1,22 @@
 <?php
-    include('adminIncludes/header.php')
+    include('adminIncludes/header.php');
+    include('../dbConnection.php');
+
+
+    $sql = "SELECT COUNT(*) FROM course";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $course_count = $row['COUNT(*)'];
+
+    $sql = "SELECT COUNT(*) FROM student";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $student_count = $row['COUNT(*)'];
+    
+    $sql = "SELECT * FROM courseorder";
+    $result = $conn->query($sql);
+    $courseorder_count = $result->num_rows;
+
 ?>
             <div class="col-sm-9 mt-5">
                 <div class="row mx-5 text-center">
@@ -7,8 +24,8 @@
                         <div class="card text-white bg-danger mb-3" style="max-width:18rem">
                             <div class="card-header">Courses</div>
                             <div class="card-body">
-                                <h4 class="card-title">5</h4>
-                                <a href="" class="btn text-white">View</a>
+                                <h4 class="card-title"><?php if(isset($course_count)){echo $course_count;}?></h4>
+                                <a href="./courses.php" class="btn text-white">View</a>
                             </div>
                         </div>
                     </div>
@@ -16,8 +33,8 @@
                         <div class="card text-white bg-success mb-3" style="max-width:18rem">
                             <div class="card-header">Students</div>
                             <div class="card-body">
-                                <h4 class="card-title">25</h4>
-                                <a href="" class="btn text-white">View</a>
+                                <h4 class="card-title"><?php if(isset($student_count)){echo $course_count;}?></h4>
+                                <a href="./students.php" class="btn text-white">View</a>
                             </div>
                         </div>
                     </div>
@@ -25,8 +42,8 @@
                         <div class="card text-white bg-info mb-3" style="max-width:18rem">
                             <div class="card-header">Sold</div>
                             <div class="card-body">
-                                <h4 class="card-title">3</h4>
-                                <a href="" class="btn text-white">View</a>
+                                <h4 class="card-title"><?php if(isset($courseorder_count)){echo $courseorder_count;}?></h4>
+                                <a href="./sellReport.php" class="btn text-white">View</a>
                             </div>
                         </div>
                     </div> 
@@ -45,18 +62,30 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th scope="row">22</th>
-                                <td>100</td>
-                                <td>amankori2307@gmail.com</td>
-                                <td>20/10/2020</td>
-                                <td>2000</td>
+                            <?php 
+                                if($courseorder_count > 0){
+                                    while($row = $result->fetch_assoc()){
+                            ?>
+                             <tr>
+                                <th scope="row"><?php echo $row['order_id']?></th>
+                                <td><?php echo $row['course_id']?></td>
+                                <td><?php echo $row['stu_email']?></td>
+                                <td><?php echo $row['order_date']?></td>
+                                <td><?php echo $row['amount']?></td>
                                 <td>
-                                    <button type="submit" class="btn btn-secondary" name="delete" value="Delete">
-                                        <i class="far fa-trash-alt"></i>
-                                    </button>
+                                    <form action="" method="POST">
+                                        <input type="hidden" name="id" value="<?php echo $row['co_id'];?>">
+                                        <button type="submit" class="btn btn-secondary" name="delete" value="Delete">
+                                            <i class="far fa-trash-alt"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
+                            <?php
+                                    }
+                                }
+                            ?>
+                           
                         </tbody>
                     </table>
                 </div>
@@ -64,6 +93,21 @@
         </div>
     </div>
     <!-- End Sidebar -->
+    <?php
+        if(isset($_REQUEST['delete'])){
+            $id = $_POST['id'];
+            $sql = "DELETE FROM courseorder WHERE co_id = '$id'";
+            if($conn->query($sql) == TRUE){
+                $sql = "SELECT * FROM courseorder";
+                $result = $conn->query($sql);
+                $courseorder_count = $result->num_rows;
+            }
+            else{
+                echo "<script>alert($conn->error)</script>";
+            }
+
+        }
+    ?>
 
 <?php
     include('./adminIncludes/footer.php')

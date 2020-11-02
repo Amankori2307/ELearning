@@ -1,13 +1,12 @@
-
-<!-- Start Including Header -->
 <?php
 	header("Pragma: no-cache");
 	header("Cache-Control: no-cache");
 	header("Expires: 0");
-
-    // following files need to be included
-	require_once("./PaytmKit/lib/config_paytm.php");
-	require_once("./PaytmKit/lib/encdec_paytm.php");
+    include('adminIncludes/header.php');
+    include('../dbConnection.php');
+	// following files need to be included
+	require_once("../PaytmKit/lib/config_paytm.php");
+	require_once("../PaytmKit/lib/encdec_paytm.php");
 
 	$ORDER_ID = "";
 	$requestParamList = array();
@@ -29,49 +28,31 @@
 		$responseParamList = getTxnStatusNew($requestParamList);
 	}
 
-    include('./includes/header.php');
 ?>
-<!-- End Including Header -->
-
-<!-- Start Course Page Banner -->
-<div class="container-fluid bg-dark">
-    <div class="row">
-        <img src="./images/coursebanner.jpg" alt="coursebanner" style="height:500px; width:100%; object-fit:cover; box-shadow:10px;">
-    </div>
-</div>
-<!-- End Course Page Banner -->
-
-<!-- Start Main Content -->
     <div class="container">
-        <h1 class="text-center my-4">Payment Status</h1>
+        <h2 class="text-center my-4">Payment Status</h2>
         <form action="" method="post">
-            <div class="form-group row ">
-                <label class="offset-sm-3 col-form-label">Order Id:</label>
-                <div>
-                    <input type="text" class="form-control mx-3" name="ORDER_ID">
-                </div>
-                <div>
-                <input type="submit" class="btn btn-primary mx-4" value=View>
-
-                </div>
+            <div class="form-group ">
+                <label for="" class="font-weight-bolder">Order ID:</label>
+                <input type="text" class="form-control" id="ORDER_ID" tabindex="1" maxlength="20" size="20" name="ORDER_ID" autocomplete="off" value="<?php echo $ORDER_ID?>" placeholder="Order ID">
             </div>
+            <input type="submit" class="btn btn-primary" value="View">
         </form>
+    <?php
+        if (isset($responseParamList) && count($responseParamList)>0 ){ 
+    ?>
         <div class="row mx-0">
             <!-- <h2 class="text-center">Payment Reciept</h2> -->
             <table class="table table-bordered mt-5">
                 <tbody>
                     <?php
                         foreach($responseParamList as $paramName => $paramValue) {
-                            if(($paramName == "TXNID") || ($paramName == "ORDERID") || ($paramName == "TXNAMOUNT") || ($paramName == "STATUS")){
-
-                            
                     ?>
                     <tr >
                         <td class="font-weight-bolder" ><?php echo $paramName?></td>
                         <td ><?php echo $paramValue?></td>
                     </tr>
                     <?php
-                            }
                         }
                     ?>
                 </tbody>
@@ -81,18 +62,9 @@
             <button type="button" class="btn btn-danger btn-sm" onclick="javascript:window.print()">Print</button>
         </div>
     </div>
-<!-- End Main Content -->
-
-
-<!-- Start Including Contact -->
+    <?php
+		}
+    ?>
 <?php
-    include('./contact.php');
+    include('./adminIncludes/footer.php')
 ?>
-<!-- End Including Contact -->
-
-
-<!-- Start Including Footer -->
-<?php
-    include('./includes/footer.php');
-?>
-<!-- End Including Footer -->

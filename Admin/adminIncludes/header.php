@@ -64,13 +64,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="sellReport.php" class="nav-link">
                                 <i class="fas fa-table"></i>
                                 Sell Report
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="adminPaymentStatus.php" class="nav-link">
                                 <i class="fas fa-table"></i>
                                 Payment Status
                             </a>
